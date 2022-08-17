@@ -1,18 +1,19 @@
 package jm.task.core.jdbc.dao;
 
-import com.mysql.cj.protocol.x.XProtocolRowInputStream;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UserDaoJDBCImpl extends Util implements UserDao {
+    private final Connection connection = getMyConnection();
     public UserDaoJDBCImpl() {
 
     }
-    Connection connection = getMyConnection();
+
 
     public void createUsersTable() {
 
@@ -63,7 +64,7 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String sql = "Select * from User";
-        try (Statement statement = connection.createStatement();
+        try (PreparedStatement statement =  connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 User user = new User();
@@ -81,11 +82,23 @@ public class UserDaoJDBCImpl extends Util implements UserDao {
     }
 
     public void cleanUsersTable() {
-        String sql = "Delete  from User";
+        String sql = "Truncate table User";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDaoJDBCImpl that)) return false;
+        return Objects.equals(connection, that.connection);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(connection);
     }
 }
