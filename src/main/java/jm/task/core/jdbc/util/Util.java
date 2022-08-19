@@ -20,7 +20,7 @@ public class Util {
     private static final String password = "root";
     private static final String url = "jdbc:mysql://localhost:3306/company_repository";
 
-     SessionFactory sessionFactory;
+    SessionFactory sessionFactory;
 
     public Connection getMyConnection() {
         Connection connection = null;
@@ -33,11 +33,9 @@ public class Util {
         return connection;
     }
 
-    public  SessionFactory getMySessionFactory() {
+    public SessionFactory getMySessionFactory() {
         if (sessionFactory == null) {
             try {
-
-
                 Properties prop = new Properties();
                 prop.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/company_repository");
                 prop.setProperty("hibernate.connection.username", "root");
@@ -50,29 +48,7 @@ public class Util {
                 configuration.addProperties(prop);
                 configuration.addAnnotatedClass(User.class);
                 sessionFactory = configuration
-                                .buildSessionFactory();
-
-
-//                prop.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
-//                prop.put(Environment.URL, "jdbc:mysql://localhost:3306/company_storage");
-//                prop.put(Environment.USER, "root");
-//                prop.put(Environment.PASS, "root");
-//                prop.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
-//                prop.put(Environment.SHOW_SQL, "true");
-//
-//                prop.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-//
-//                prop.put(Environment.HBM2DDL_AUTO, "create-drop");
-//
-//                configuration.setProperties(prop);
-//
-//                configuration.addAnnotatedClass(User.class);
-//
-//                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-//                        .applySettings(configuration.getProperties()).build();
-//                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-
+                        .buildSessionFactory();
                 System.out.println("good");
             } catch (HibernateException e) {
                 throw new RuntimeException(e);
